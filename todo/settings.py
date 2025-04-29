@@ -1,6 +1,12 @@
 # settings.py
 
+import environ
 import os
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -9,7 +15,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-SECRET_KEY = '844ty@qr8b&cm1r2-*+z91o5hzgi@ymxs$oitj78hs#7gi4x!y'
+SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = True
 
