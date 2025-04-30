@@ -23,6 +23,40 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
+    - name: Wait for SonarQube Quality Gate
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        echo "Waiting for SonarQube quality gate..."
+        ceTaskUrl=$(cat .scannerwork/report-task.txt | grep ceTaskUrl | cut -d'=' -f2)
+        echo "ceTaskUrl: $ceTaskUrl"
+
+        # Polling the quality gate status
+        status="PENDING"
+        timeout=60
+        count=0
+        while [[ "$status" == "PENDING" || "$status" == "IN_PROGRESS" ]]; do
+          sleep 5
+          count=$((count + 1))
+          if [ "$count" -gt "$timeout" ]; then
+            echo "Timeout waiting for SonarQube quality gate"
+            exit 1
+          fi
+
+          analysisId=$(curl -s -u $SONAR_TOKEN: $ceTaskUrl | jq -r .task.analysisId)
+          qualityGateStatus=$(curl -s -u $SONAR_TOKEN: https://sonarcloud.io/api/qualitygates/project_status?analysisId=$analysisId | jq -r .projectStatus.status)
+          echo "Current status: $qualityGateStatus"
+          status=$qualityGateStatus
+        done
+
+        if [ "$status" != "OK" ]; then
+          echo "❌ Quality Gate failed: $status"
+          exit 1
+        fi
+
+        echo "✅ Quality Gate passed: $status"
+
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
