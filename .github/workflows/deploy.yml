@@ -36,13 +36,13 @@ jobs:
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/todo-api:latest .
 
-    # - name: Scan Docker Image with Docker Scout
-    #   uses: docker/scout-action@v1
-    #   with:
-    #     image: ${{ secrets.DOCKER_USERNAME }}/todo-api:latest
-    #     dockerhub-user: ${{ secrets.DOCKER_USERNAME }}
-    #     dockerhub-password: ${{ secrets.DOCKER_PASSWORD }}
-    #     command: cves
+    - name: Scan Docker Image with Docker Scout
+      uses: docker/scout-action@v1
+      with:
+        image: ${{ secrets.DOCKER_USERNAME }}/todo-api:latest
+        dockerhub-user: ${{ secrets.DOCKER_USERNAME }}
+        dockerhub-password: ${{ secrets.DOCKER_PASSWORD }}
+        command: cves
 
     - name: Push Docker Image
       run: |
