@@ -4,7 +4,7 @@
 APP_NAME=todo-api
 DOCKER_IMAGE=tonutilisateurdocker/todo-api:latest
 APP_PORT=8000
-DOMAIN_NAME=example.com  # 🔁 à adapter
+DOMAIN_NAME=example.com
 NGINX_CONF_PATH="/etc/nginx/sites-available/$APP_NAME"
 
 echo "[+] Pull de la dernière image Docker..."
