@@ -47,6 +47,10 @@ jobs:
         dockerhub-password: ${{ secrets.DOCKER_PASSWORD }}
         command: cves
 
+    - name: Push Docker Image
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/todo-api:latest
+
 
   # deploy:
   #     if: github.ref == 'refs/heads/main'
