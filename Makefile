@@ -1,14 +1,10 @@
-# install-dev:
-# 	docker compose exec web pre-commit install
-
-# lint:
-# 	docker compose exec web pre-commit run --all-files
-
-# flake8:
-# 	docker compose exec web flake8 .
+.PHONY: test
 
 flake8:
 	docker compose exec web flake8 .
 
 test:
-	docker compose run --rm web python manage.py test
+	docker compose exec web pytest --disable-warnings -v
+
+migrate:
+	docker compose exec web python manage.py migrate

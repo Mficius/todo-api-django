@@ -1,13 +1,13 @@
-# settings.py
+import os
+import sys
+from pathlib import Path
 
 import environ
-import os
 
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
-from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -17,7 +17,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-SECRET_KEY=env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = True
 
@@ -34,7 +34,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Add your app here
     'tasks',
+    'rest_framework',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -45,6 +47,23 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if 'test' in sys.argv:
+    REST_FRAMEWORK = {
+        'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.AllowAny',
+        ]
+    }
+else:
+
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework.authentication.SessionAuthentication',
+            'rest_framework.authentication.BasicAuthentication',
+        ),
+        'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+        # Add other configurations as needed
+    }
 
 ROOT_URLCONF = 'todo.urls'
 
