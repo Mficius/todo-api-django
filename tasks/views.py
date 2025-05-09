@@ -5,6 +5,15 @@ from .models import Task
 from .serializers import TaskSerializer
 
 
+def unused_function():
+    print("Je ne suis jamais appelé !")
+
+
+def do_something():
+    # temp = 42  # jamais utilisé
+    return "OK"
+
+
 class TaskListCreateView(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
