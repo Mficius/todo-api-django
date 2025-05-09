@@ -14,14 +14,14 @@ services:
   #     - sonarqube_data:/opt/sonarqube/data
   #     - sonarqube_extensions:/opt/sonarqube/extensions
   web:
-    build: .
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
-      - static_volume:/app/staticfiles
-      - media_volume:/app/mediafiles
-    command: gunicorn todo.wsgi:application --bind 0.0.0.0:8000
+  build: .
+  ports:
+    - "8000:8000"
+  volumes:
+    - .:/app
+    - static_volume:/app/staticfiles
+    - media_volume:/app/mediafiles
+  command: gunicorn todo.wsgi:application --bind 0.0.0.0:8000
 
 volumes:
   static_volume:
