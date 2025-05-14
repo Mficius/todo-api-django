@@ -62,6 +62,10 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    # we have to include the SECRET_KEY env because the docker build process needs it
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
     needs: test  # Only runs if "test" job passed
     steps:
     - name: Checkout Code
