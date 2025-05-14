@@ -62,10 +62,6 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    # we have to include the SECRET_KEY env because the docker build process needs it
-    env:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-
     needs: test  # Only runs if "test" job passed
     steps:
     - name: Checkout Code
@@ -82,7 +78,10 @@ jobs:
 
 
     - name: Build Docker Image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/todo-api:latest .
+      run: |
+          docker build \
+            --build-arg SECRET_KEY=${{ secrets.SECRET_KEY }} \
+            -t ${{ secrets.DOCKER_USERNAME }}/todo-api:latest .
 
     - name: Scan Docker Image with Docker Scout
       uses: docker/scout-action@v1
