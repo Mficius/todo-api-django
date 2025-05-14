@@ -16,6 +16,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "todo" do |todo|
     todo.vm.network "private_network", ip: "192.168.56.2"
+    # port forwarding
+    #todo.vm.network "forwarded_port", guest: 80, host: 8080
     todo.vm.hostname = "todo"
     todo.vm.provider "virtualbox" do |vb|
       vb.name = "todo"
